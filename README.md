@@ -60,8 +60,8 @@ FocusGuard is an innovative real-time computer vision system designed to enhance
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/focusguard.git
-   cd focusguard
+   git clone https://github.com/invesigator/FocusGuard-Real-Time-Self-Monitoring-System-for-Student-Focus.git
+   cd FocusGuard-Real-Time-Self-Monitoring-System-for-Student-Focus
    ```
 
 2. **Create virtual environment**
@@ -205,44 +205,6 @@ This project was developed as part of a Bachelor's thesis at Universiti Tunku Ab
 - Gamification elements significantly enhance user engagement with productivity tools
 - Real-time feedback is crucial for effective attention training
 - Configurable thresholds are essential for individual adaptation
-
-## 🤝 Contributing
-
-We welcome contributions to improve FocusGuard! Here's how you can help:
-
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
-3. **Commit your changes** (`git commit -m 'Add amazing feature'`)
-4. **Push to the branch** (`git push origin feature/amazing-feature`)
-5. **Open a Pull Request**
-
-### Areas for Contribution
-- Enhanced machine learning models for detection
-- Mobile application development
-- Additional gamification features
-- Performance optimizations
-- Accessibility improvements
-- Internationalization
-
-## 🐛 Known Issues & Limitations
-
-- Detection accuracy may decrease with poor lighting conditions
-- Glasses or reflective surfaces can occasionally interfere with eye tracking
-- System requires consistent camera positioning for optimal performance
-- Currently optimized for single-user sessions
-
-## 🔮 Future Enhancements
-
-- **Adaptive Thresholds**: Machine learning-based personalization
-- **Mobile Apps**: Native iOS and Android applications
-- **Cloud Sync**: Multi-device synchronization
-- **Advanced Analytics**: Detailed focus pattern analysis
-- **Team Features**: Collaborative study sessions
-- **Integration**: Calendar and task management integration
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
