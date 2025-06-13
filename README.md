@@ -94,41 +94,68 @@ FocusGuard is an innovative real-time computer vision system designed to enhance
    Open your browser and navigate to `http://localhost:5000`
 
 ## 📁 Project Structure
-
 ```
-focusguard/
-├── app.py                 # Main Flask application
-├── config.py             # Configuration settings
-├── requirements.txt      # Python dependencies
+FocusGuard-Real-Time-Self-Monitoring-System-for-Student-Focus/
+├── app.py                    # Main Flask application
+├── auth_routes.py            # Authentication endpoints
+├── auth.py                   # Authentication utilities
+├── config.py                 # Configuration settings
+├── create_db.py              # Database initialization
+├── main.py                   # Application entry point
+├── profile_routes.py         # User profile management
+├── analyzers/                # Facial analysis components
+│   ├── facial_metrics.py         # EAR/MAR calculations
+│   └── head_pose_analyzer.py     # Head pose estimation
+├── assets/                 # Static assets
+│   └── audio/              # Alert sound files
+│       ├── break_complete.wav            # Break completion sound
+│       ├── camera_blocked.wav            # Camera blocked alert
+│       ├── stay_focus.wav                # Focus reminder
+│       ├── take_some_fresh_air_sir.wav   # Break suggestion
+│       ├── wake_up_sir.wav               # Drowsiness alert
+│       └── work_complete.wav             # Work completion sound
+├── database/               # Database storage
+│   └── focusguard.db       # SQLite database file
+├── detectors/              # Computer vision detection modules
+│   └── facial_landmark_detector.py   # MediaPipe face detection
 ├── models/
-│   └── user.py          # User model and database operations
+│   └── user.py             # User model and database operations
+├── templates/              # HTML templates and frontend assets
+│   ├── js/                 # JavaScript modules
+│   │   ├── modules/        # Modular JS components
+│   │   │   ├── app-state.js         # Application state management
+│   │   │   ├── auth.js              # Authentication logic
+│   │   │   ├── detection.js         # Detection controls
+│   │   │   ├── gamification.js      # Gamification features
+│   │   │   ├── notifications.js     # Notification system
+│   │   │   ├── pomodoro.js          # Pomodoro timer
+│   │   │   ├── profile.js           # Profile management
+│   │   │   ├── settings.js          # Settings controls
+│   │   │   ├── socket-handlers.js   # WebSocket communication
+│   │   │   ├── statistics.js        # Statistics display
+│   │   │   ├── tabs.js              # Tab navigation
+│   │   │   ├── ui-utils.js          # UI utilities
+│   │   │   ├── user_dropdown.js     # User dropdown menu
+│   │   │   └── user-menu.js         # User menu controls
+│   │   └── main.js                  # Main JavaScript entry point
+│   ├── forgot_password.html         # Password recovery page
+│   ├── index.html                   # Main dashboard
+│   ├── login.html                   # Login page
+│   ├── profile.html                 # User profile page
+│   ├── register.html                # Registration page
+│   ├── user_dropdown.html           # User dropdown component
+│   ├── styles.css                   # Main stylesheet
+│   └── user_dropdown.css            # User dropdown styles
+├── ui/# User interface components
+│   ├── ui.py           # UI utility functions
 ├── utils/
-│   ├── audio_manager.py  # Audio alert management
-│   ├── create_db.py     # Database initialization
-│   ├── detection/       # Computer vision modules
-│   │   ├── drowsiness_detector.py
-│   │   ├── facial_landmark_detector.py
-│   │   ├── facial_metrics_analyzer.py
-│   │   └── head_pose_analyzer.py
-│   ├── gamification/    # Gamification system
-│   │   ├── achievement_manager.py
-│   │   └── analytics_manager.py
-│   ├── pomodoro_timer.py # Timer functionality
-│   ├── statistics_manager.py # Session analytics
-│   └── web_drowsiness_detector.py # Web interface for detection
-├── routes/
-│   ├── auth_routes.py   # Authentication endpoints
-│   └── profile_routes.py # User profile management
-├── static/
-│   ├── css/            # Stylesheets
-│   ├── js/             # JavaScript modules
-│   ├── audio/          # Alert sound files
-│   └── images/         # Static images
-└── templates/          # HTML templates
-    ├── index.html      # Main dashboard
-    ├── login.html      # Login page
-    ├── register.html   # Registration page
-    └── profile.html    # User profile page
+│   ├── achievement_manager.py
+│   ├── analytics_manager.py       # Database initialization
+│   ├── audio_manager.py           # Audio alert management
+│   ├── logging_setup.py           # Application logging configuration
+│   ├── podomoro_timer.py          # Pomodoro timer functionality
+│   ├── statistics_manager.py      # Session statistics processing
+│   └──  test_data.py              # Test data and validation
 ```
 
 ## 🎮 Usage
@@ -214,28 +241,10 @@ This project was developed as part of a Bachelor's thesis at Universiti Tunku Ab
 - **OpenCV Community**: For comprehensive computer vision tools
 - **Dataset Contributors**: Driver-Drowsiness-Dataset-D3S and YawnDD datasets
 
-## 📞 Contact
-
-**Soo Jia Sheng**
-- University: Universiti Tunku Abdul Rahman (UTAR)
-- Faculty: Information and Communication Technology
-- Email: [your-email@example.com]
-- GitHub: [@yourusername](https://github.com/yourusername)
-
 ## 📚 Citation
 
 If you use this work in your research, please cite:
-
-```bibtex
-@thesis{soo2025focusguard,
-  title={FocusGuard: Real-Time Self-Monitoring System for Enhancing Student Focus Using Computer Vision},
-  author={Soo Jia Sheng},
-  year={2025},
-  school={Universiti Tunku Abdul Rahman},
-  type={Bachelor's Thesis},
-  address={Kampar, Malaysia}
-}
-```
+Soo Jia Sheng. _FocusGuard: Real-Time Self-Monitoring System for Enhancing Student Focus Using Computer Vision_. 2025. Available at: https://github.com/invesigator/FocusGuard-Real-Time-Self-Monitoring-System-for-Student-Focus/
 
 ---
 
