@@ -1,0 +1,46 @@
+<!-- User Dropdown Component -->
+<div class="relative" id="userDropdownContainer">
+  <button
+    id="userDropdownButton"
+    class="flex items-center text-white focus:outline-none hover:bg-indigo-700 px-3 py-2 rounded transition-colors duration-200"
+  >
+    <span class="mr-2">{{ user.full_name }}</span>
+    <i class="fas fa-user-circle text-xl"></i>
+    <i class="fas fa-chevron-down ml-2 text-xs"></i>
+  </button>
+  <div
+    id="userDropdownMenu"
+    class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-1 z-50"
+  >
+    <div class="px-4 py-3 border-b border-gray-100">
+      <p class="text-sm font-medium text-gray-900">{{ user.full_name }}</p>
+      <p class="text-xs text-gray-500 truncate">{{ user.email }}</p>
+    </div>
+    <a
+      href="/profile"
+      class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors duration-150"
+    >
+      <i class="fas fa-user-cog mr-2 text-blue-500"></i> Profile
+    </a>
+    <a
+      href="/"
+      class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors duration-150"
+    >
+      <i class="fas fa-home mr-2 text-blue-500"></i> Dashboard
+    </a>
+    <a
+      href="#"
+      onclick="document.getElementById('settingsTab').click(); return false;"
+      class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors duration-150"
+    >
+      <i class="fas fa-cog mr-2 text-blue-500"></i> Settings
+    </a>
+    <div class="border-t border-gray-100 my-1"></div>
+    <a
+      href="/logout"
+      class="block px-4 py-2 text-red-600 hover:bg-red-50 transition-colors duration-150"
+    >
+      <i class="fas fa-sign-out-alt mr-2"></i> Logout
+    </a>
+  </div>
+</div>

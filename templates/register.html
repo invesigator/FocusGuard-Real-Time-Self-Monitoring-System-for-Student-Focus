@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FocusGuard - Register</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Tailwind CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body class="bg-gray-100 min-h-screen font-sans">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 shadow-lg">
+      <div class="container mx-auto px-4 py-6">
+        <div class="flex justify-center items-center">
+          <div class="flex items-center">
+            <i class="fas fa-eye text-white text-3xl mr-3"></i>
+            <h1 class="text-2xl md:text-3xl font-bold text-white">
+              FocusGuard
+            </h1>
+          </div>
+        </div>
+        <p class="text-blue-100 mt-2 text-center">
+          Real-Time Student Focus Monitoring System
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <div class="max-w-md mx-auto">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="border-b border-gray-200 px-6 py-4">
+            <h2 class="text-lg font-semibold text-gray-800">
+              <i class="fas fa-user-plus mr-2 text-blue-600"></i>Create Account
+            </h2>
+          </div>
+          <div class="p-6">
+            <!-- Registration Form -->
+            <form id="registerForm" method="POST" action="/register">
+              <!-- Alert for errors -->
+              <div
+                id="registerAlert"
+                class="hidden mb-4 px-4 py-3 rounded relative"
+                role="alert"
+              >
+                <span id="registerAlertMessage"></span>
+              </div>
+
+              <!-- Full Name Field -->
+              <div class="mb-4">
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  for="fullName"
+                >
+                  Full Name
+                </label>
+                <div class="relative">
+                  <div
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                  >
+                    <i class="fas fa-user text-gray-400"></i>
+                  </div>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="fullName"
+                    name="fullName"
+                    type="text"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Email Field -->
+              <div class="mb-4">
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  for="email"
+                >
+                  Email
+                </label>
+                <div class="relative">
+                  <div
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                  >
+                    <i class="fas fa-envelope text-gray-400"></i>
+                  </div>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email address"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Username Field -->
+              <div class="mb-4">
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  for="username"
+                >
+                  Username
+                </label>
+                <div class="relative">
+                  <div
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                  >
+                    <i class="fas fa-at text-gray-400"></i>
+                  </div>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="username"
+                    name="username"
+                    type="text"
+                    placeholder="Choose a username"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Password Field -->
+              <div class="mb-4">
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  for="password"
+                >
+                  Password
+                </label>
+                <div class="relative">
+                  <div
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                  >
+                    <i class="fas fa-lock text-gray-400"></i>
+                  </div>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Create a password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    id="passwordToggle"
+                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                    title="Show Password"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">
+                  Password must be at least 8 characters long with letters,
+                  numbers, and symbols
+                </p>
+              </div>
+
+              <!-- Confirm Password Field -->
+              <div class="mb-6">
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  for="confirmPassword"
+                >
+                  Confirm Password
+                </label>
+                <div class="relative">
+                  <div
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                  >
+                    <i class="fas fa-check-double text-gray-400"></i>
+                  </div>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Confirm your password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    id="confirmPasswordToggle"
+                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                    title="Show Password"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Terms & Conditions -->
+              <div class="mb-6">
+                <div class="flex items-center">
+                  <input
+                    id="terms"
+                    name="terms"
+                    type="checkbox"
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <label for="terms" class="ml-2 block text-sm text-gray-700">
+                    I agree to the
+                    <a href="/terms" class="text-blue-600 hover:underline"
+                      >Terms of Service</a
+                    >
+                    and
+                    <a href="/privacy" class="text-blue-600 hover:underline"
+                      >Privacy Policy</a
+                    >
+                  </label>
+                </div>
+              </div>
+
+              <!-- Register Button -->
+              <div class="flex items-center justify-between">
+                <button
+                  class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 w-full btn-focus-effect"
+                  type="submit"
+                >
+                  <i class="fas fa-user-plus mr-2"></i>Create Account
+                </button>
+              </div>
+            </form>
+
+            <!-- Login Link -->
+            <div class="text-center mt-6">
+              <p class="text-gray-600">
+                Already have an account?
+                <a
+                  href="login.html"
+                  class="text-blue-600 hover:text-blue-800 font-medium ml-1"
+                >
+                  Login Now
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-6 mt-12">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <h2 class="text-xl font-bold text-white flex items-center">
+              <i class="fas fa-eye mr-2"></i>FocusGuard
+            </h2>
+            <p class="text-sm text-gray-400">Student Focus Monitoring System</p>
+          </div>
+          <div class="text-sm text-gray-400">
+            <p>&copy; 2025 FocusGuard. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/modules/ui-utils.js"></script>
+    <script src="js/modules/notifications.js"></script>
+    <script src="js/modules/auth.js"></script>
+  </body>
+</html>

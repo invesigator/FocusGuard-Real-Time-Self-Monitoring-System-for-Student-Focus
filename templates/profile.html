@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FocusGuard - User Profile</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Tailwind CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Add this to the <head> section of profile.html -->
+    <style>
+      /* Enhanced form styling for profile edit page */
+      .profile-form input[type="text"],
+      .profile-form input[type="email"],
+      .profile-form input[type="password"] {
+        padding: 0.75rem 1rem;
+        height: 3rem;
+        width: 100%;
+        border-radius: 0.375rem;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+      }
+
+      .profile-form input[type="text"]:focus,
+      .profile-form input[type="email"]:focus,
+      .profile-form input[type="password"]:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        outline: none;
+      }
+
+      .profile-form label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #4b5563;
+        font-size: 0.95rem;
+      }
+
+      .profile-form .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .profile-form .input-group {
+        position: relative;
+      }
+
+      .profile-form .help-text {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-top: 0.25rem;
+        display: block;
+      }
+
+      .profile-form .input-readonly {
+        background-color: #f9fafb;
+        color: #6b7280;
+      }
+
+      /* Modal animation */
+      @keyframes modal-pop {
+        0% {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      #editProfileModal > div:nth-child(2) {
+        animation: modal-pop 0.3s ease-out forwards;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 min-h-screen font-sans">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 shadow-lg">
+      <div class="container mx-auto px-4 py-6">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center">
+            <i class="fas fa-eye text-white text-3xl mr-3"></i>
+            <h1 class="text-2xl md:text-3xl font-bold text-white">
+              FocusGuard
+            </h1>
+          </div>
+          <div class="flex items-center">
+            <a href="/" class="text-white mr-6 hover:text-blue-200">
+              <i class="fas fa-home mr-1"></i> Dashboard
+            </a>
+            <div class="relative group">
+              <button class="flex items-center text-white focus:outline-none">
+                <span class="mr-2">{{ user.full_name }}</span>
+                <i class="fas fa-user-circle text-xl"></i>
+              </button>
+              <div
+                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden group-hover:block"
+              >
+                <a
+                  href="/profile"
+                  class="block px-4 py-2 text-gray-700 hover:bg-blue-100"
+                >
+                  <i class="fas fa-user-cog mr-2"></i> Profile
+                </a>
+                <a
+                  href="/logout"
+                  class="block px-4 py-2 text-gray-700 hover:bg-blue-100"
+                >
+                  <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-blue-100 mt-2">
+          Real-Time Student Focus Monitoring System
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Left column - User Info -->
+        <div class="md:col-span-1">
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="border-b border-gray-200 px-6 py-4">
+              <h2 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-user mr-2 text-blue-600"></i>User Profile
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-col items-center mb-6">
+                <div
+                  class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4"
+                >
+                  <i class="fas fa-user text-blue-600 text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800">
+                  {{ user.full_name }}
+                </h3>
+                <p class="text-sm text-gray-600">@{{ user.username }}</p>
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex items-center">
+                  <div
+                    class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-envelope text-blue-600"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-500">Email</p>
+                    <p class="text-sm font-medium">{{ user.email }}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center">
+                  <div
+                    class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-calendar-alt text-blue-600"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-500">Member Since</p>
+                    <p class="text-sm font-medium">
+                      {% if user.created_at is defined %} {% if user.created_at
+                      is string %} {{ user.created_at }} {% else %} {{
+                      user.created_at.strftime('%B %d, %Y') }} {% endif %} {%
+                      else %} N/A {% endif %}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-center">
+                  <div
+                    class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-clock text-blue-600"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-500">Last Login</p>
+                    <p class="text-sm font-medium">
+                      {% if user.last_login %} {% if user.last_login is string
+                      %} {{ user.last_login }} {% else %} {{
+                      user.last_login.strftime('%B %d, %Y %I:%M %p') }} {% endif
+                      %} {% else %} Never {% endif %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6">
+                <button
+                  id="showEditProfileModal"
+                  class="flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300"
+                >
+                  <i class="fas fa-user-edit mr-2"></i>Edit Profile
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column - Stats and Progress -->
+        <div class="md:col-span-2">
+          <!-- Progress Summary -->
+          <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+            <div class="border-b border-gray-200 px-6 py-4">
+              <h2 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-chart-line mr-2 text-blue-600"></i>Focus
+                Progress
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Focus Time Card -->
+                <div class="bg-blue-50 rounded-lg p-4">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center">
+                      <div
+                        class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3"
+                      >
+                        <i class="fas fa-hourglass-half text-blue-600"></i>
+                      </div>
+                      <h3 class="text-lg font-medium text-gray-800">
+                        Focus Time
+                      </h3>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800"
+                      >{{ stats.focus_time }}</span
+                    >
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      class="bg-blue-600 h-2.5 rounded-full"
+                      style="width: {{ stats.focus_progress }}%"
+                    ></div>
+                  </div>
+                  <p class="text-xs text-gray-600 mt-1">
+                    {{ stats.focus_progress }}% of monthly goal (20h)
+                  </p>
+                </div>
+
+                <!-- Sessions Card -->
+                <div class="bg-green-50 rounded-lg p-4">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center">
+                      <div
+                        class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3"
+                      >
+                        <i class="fas fa-check-circle text-green-600"></i>
+                      </div>
+                      <h3 class="text-lg font-medium text-gray-800">
+                        Sessions
+                      </h3>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800"
+                      >{{ stats.total_sessions }}</span
+                    >
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      class="bg-green-600 h-2.5 rounded-full"
+                      style="width: {{ stats.sessions_progress }}%"
+                    ></div>
+                  </div>
+                  <p class="text-xs text-gray-600 mt-1">
+                    {{ stats.sessions_progress }}% of monthly goal (20)
+                  </p>
+                </div>
+
+                <!-- Points Card -->
+                <div class="bg-purple-50 rounded-lg p-4">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center">
+                      <div
+                        class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3"
+                      >
+                        <i class="fas fa-award text-purple-600"></i>
+                      </div>
+                      <h3 class="text-lg font-medium text-gray-800">Points</h3>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800"
+                      >{{ stats.total_points }}</span
+                    >
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      class="bg-purple-600 h-2.5 rounded-full"
+                      style="width: {{ stats.level_progress }}%"
+                    ></div>
+                  </div>
+                  <p class="text-xs text-gray-600 mt-1">
+                    Level {{ stats.level }} ({{ stats.level_progress }}% to
+                    Level {{ stats.next_level }})
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Sessions -->
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div
+              class="border-b border-gray-200 px-6 py-4 flex justify-between items-center recent-sessions-header"
+            >
+              <h2 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-history mr-2 text-blue-600"></i>Recent Sessions
+              </h2>
+              <a
+                href="#"
+                class="text-sm text-blue-600 hover:text-blue-800 view-all-sessions"
+              >
+                View All
+              </a>
+            </div>
+            <div class="p-6">
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead>
+                    <tr>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Date
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Duration
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Events
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Pomodoros
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Points
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    {% for session in sessions %}
+                    <tr class="hover:bg-gray-50">
+                      <td class="px-4 py-4 whitespace-nowrap">
+                        {% if session.start_time is string %} {{
+                        session.start_time }} {% else %} {{
+                        session.start_time.strftime('%b %d, %Y %I:%M %p') }} {%
+                        endif %}
+                      </td>
+                      <td class="px-4 py-4 whitespace-nowrap">
+                        {{ session.duration_minutes }} min
+                      </td>
+                      <td class="px-4 py-4 whitespace-nowrap">
+                        <div class="flex items-center space-x-2">
+                          <span
+                            class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800"
+                            >{{ session.drowsy_events }}</span
+                          >
+                          <span
+                            class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800"
+                            >{{ session.yawn_events }}</span
+                          >
+                          <span
+                            class="px-2 py-1 text-xs rounded-full bg-orange-100 text-orange-800"
+                            >{{ session.distraction_events }}</span
+                          >
+                        </div>
+                      </td>
+                      <td class="px-4 py-4 whitespace-nowrap">
+                        {{ session.completed_pomodoros }}
+                      </td>
+                      <td
+                        class="px-4 py-4 whitespace-nowrap font-medium text-blue-600"
+                      >
+                        +{{ session.points_earned }}
+                      </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                      <td
+                        colspan="5"
+                        class="px-4 py-8 text-center text-gray-500"
+                      >
+                        No sessions recorded yet. Start a focus session to track
+                        your progress!
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Edit Profile Modal with Enhanced Styling -->
+    <div
+      id="editProfileModal"
+      class="fixed inset-0 z-50 overflow-y-auto hidden"
+    >
+      <div
+        class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+      >
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <div
+          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+        >
+          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+              <div
+                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10"
+              >
+                <i class="fas fa-user-edit text-blue-600"></i>
+              </div>
+              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                <h3
+                  class="text-lg leading-6 font-medium text-gray-900"
+                  id="modal-title"
+                >
+                  Edit Profile
+                </h3>
+                <div class="mt-4">
+                  <form id="editProfileForm">
+                    <!-- Alert for errors/success -->
+                    <div
+                      id="profileAlert"
+                      class="hidden mb-4 px-4 py-3 rounded relative"
+                      role="alert"
+                    >
+                      <span id="profileAlertMessage"></span>
+                    </div>
+
+                    <!-- Full Name -->
+                    <div class="mb-4">
+                      <label
+                        for="editFullName"
+                        class="block text-sm font-medium text-gray-700"
+                        >Full Name</label
+                      >
+                      <input
+                        type="text"
+                        name="fullName"
+                        id="editFullName"
+                        class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        value="{{ user.full_name }}"
+                      />
+                    </div>
+
+                    <!-- Email (readonly) -->
+                    <div class="mb-4">
+                      <label
+                        for="editEmail"
+                        class="block text-sm font-medium text-gray-700"
+                        >Email Address</label
+                      >
+                      <input
+                        type="email"
+                        name="email"
+                        id="editEmail"
+                        class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md bg-gray-50"
+                        value="{{ user.email }}"
+                        readonly
+                      />
+                      <p class="mt-1 text-xs text-gray-500">
+                        Email cannot be changed
+                      </p>
+                    </div>
+
+                    <!-- Username (readonly) -->
+                    <div class="mb-4">
+                      <label
+                        for="editUsername"
+                        class="block text-sm font-medium text-gray-700"
+                        >Username</label
+                      >
+                      <input
+                        type="text"
+                        name="username"
+                        id="editUsername"
+                        class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md bg-gray-50"
+                        value="{{ user.username }}"
+                        readonly
+                      />
+                      <p class="mt-1 text-xs text-gray-500">
+                        Username cannot be changed
+                      </p>
+                    </div>
+
+                    <!-- Password section header -->
+                    <div class="mb-2">
+                      <h4 class="font-medium text-gray-700">
+                        Change Password (Optional)
+                      </h4>
+                      <p class="text-xs text-gray-500">
+                        Leave blank if you don't want to change it
+                      </p>
+                    </div>
+
+                    <!-- New Password -->
+                    <div class="mb-4">
+                      <label
+                        for="newPassword"
+                        class="block text-sm font-medium text-gray-700"
+                        >New Password</label
+                      >
+                      <input
+                        type="password"
+                        name="newPassword"
+                        id="newPassword"
+                        class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                      />
+                    </div>
+
+                    <!-- Confirm New Password -->
+                    <div class="mb-4">
+                      <label
+                        for="confirmPassword"
+                        class="block text-sm font-medium text-gray-700"
+                        >Confirm New Password</label
+                      >
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        id="confirmPassword"
+                        class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse form-footer"
+          >
+            <button
+              type="button"
+              id="saveProfileBtn"
+              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm btn-primary"
+            >
+              Save Changes
+            </button>
+            <button
+              type="button"
+              id="cancelProfileBtn"
+              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm btn-secondary"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Sessions Modal -->
+    <div
+      id="allSessionsModal"
+      class="fixed inset-0 z-50 hidden overflow-y-auto flex items-center justify-center"
+    >
+      <div
+        class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+      ></div>
+      <div
+        class="relative bg-white rounded-lg shadow-xl transform transition-all w-full max-w-4xl mx-4"
+      >
+        <div
+          class="flex items-start justify-between p-4 border-b border-gray-200"
+        >
+          <h3 class="text-lg font-medium text-gray-900">
+            <i class="fas fa-history mr-2 text-blue-600"></i>Session History
+          </h3>
+          <button
+            id="closeSessionsModalBtn"
+            class="text-gray-400 hover:text-gray-500 focus:outline-none"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+        <div class="p-6">
+          <!-- Loading indicator -->
+          <div
+            id="sessionsLoadingIndicator"
+            class="hidden py-8 flex justify-center"
+          >
+            <div class="flex items-center">
+              <i class="fas fa-spinner fa-spin text-blue-600 text-2xl mr-3"></i>
+              <span class="text-gray-600">Loading sessions...</span>
+            </div>
+          </div>
+
+          <!-- Error message -->
+          <div
+            id="sessionsErrorMessage"
+            class="hidden py-4 px-6 bg-red-100 text-red-700 rounded-lg mb-6"
+          >
+            An error occurred while loading sessions.
+          </div>
+
+          <!-- Sessions table -->
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Date
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Duration
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Events
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Pomodoros
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Points
+                  </th>
+                </tr>
+              </thead>
+              <tbody
+                id="allSessionsTableBody"
+                class="bg-white divide-y divide-gray-200"
+              >
+                <!-- Session rows will be inserted here by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination controls -->
+          <div id="sessionsPaginationControls" class="mt-4">
+            <!-- Pagination controls will be inserted here by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-6 mt-12">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <h2 class="text-xl font-bold text-white flex items-center">
+              <i class="fas fa-eye mr-2"></i>FocusGuard
+            </h2>
+            <p class="text-sm text-gray-400">Student Focus Monitoring System</p>
+          </div>
+          <div class="text-sm text-gray-400">
+            <p>&copy; 2025 FocusGuard. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/modules/ui-utils.js"></script>
+    <script src="js/modules/notifications.js"></script>
+    <script src="js/modules/profile.js"></script>
+  </body>
+</html>

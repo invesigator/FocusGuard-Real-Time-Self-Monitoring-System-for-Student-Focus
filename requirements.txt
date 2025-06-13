@@ -1,0 +1,37 @@
+# Core web framework and extensions
+Flask==3.0.0
+Flask-SocketIO==5.3.6
+Flask-Login==0.6.3
+
+# Computer vision and image processing
+opencv-python==4.8.1.78
+mediapipe==0.10.8
+numpy==1.24.3
+
+# Audio processing
+pygame==2.5.2
+
+# Scientific computing and data analysis
+scipy==1.11.4
+pandas==2.1.4
+
+# Web security and authentication
+Werkzeug==3.0.1
+
+# System monitoring
+psutil==5.9.6
+
+# Database (if using SQLAlchemy instead of raw sqlite3)
+# SQLAlchemy==2.0.23
+# Flask-SQLAlchemy==3.1.1
+
+# Development and testing (optional)
+# pytest==7.4.3
+# pytest-flask==1.3.0
+
+# Production server (optional)
+# gunicorn==21.2.0
+
+# Additional utilities that might be needed
+# python-dotenv==1.0.0  # For environment variables
+# Pillow==10.1.0  # If you need additional image processing beyond OpenCV

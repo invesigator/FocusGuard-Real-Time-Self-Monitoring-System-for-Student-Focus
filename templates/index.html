@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FocusGuard - Student Focus Monitoring System</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="user_dropdown.css" />
+    <!-- Tailwind CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body class="bg-gray-100 min-h-screen font-sans">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 shadow-lg">
+      <div class="container mx-auto px-4 py-6">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center">
+            <i class="fas fa-eye text-white text-3xl mr-3"></i>
+            <h1 class="text-2xl md:text-3xl font-bold text-white">
+              FocusGuard
+            </h1>
+          </div>
+          <div class="flex items-center space-x-4">
+            <!-- Status Indicator -->
+            <div
+              id="statusIndicator"
+              class="flex items-center px-3 py-1 rounded-full bg-red-500 text-white text-sm"
+            >
+              <i class="fas fa-circle-xmark mr-2"></i>
+              <span id="statusText">Inactive</span>
+            </div>
+
+            <!-- Improved User Dropdown -->
+            <div class="relative" id="userDropdownContainer">
+              <button
+                id="userDropdownButton"
+                class="flex items-center text-white focus:outline-none bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-lg transition-colors duration-200"
+              >
+                <span class="mr-2">{{ user.full_name }}</span>
+                <i class="fas fa-user-circle text-xl"></i>
+                <i class="fas fa-chevron-down ml-2 text-xs"></i>
+              </button>
+              <div
+                id="userDropdownMenu"
+                class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-1 z-50 hidden"
+              >
+                <div class="px-4 py-3 border-b border-gray-100">
+                  <p class="text-sm font-medium text-gray-900">
+                    {{ user.full_name }}
+                  </p>
+                  <p class="text-xs text-gray-500 truncate">{{ user.email }}</p>
+                </div>
+                <a
+                  href="/profile"
+                  class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors duration-150"
+                >
+                  <i class="fas fa-user-cog mr-2 text-blue-500"></i> Profile
+                </a>
+                <div class="border-t border-gray-100 my-1"></div>
+                <a
+                  href="/logout"
+                  class="block px-4 py-2 text-red-600 hover:bg-red-50 transition-colors duration-150"
+                >
+                  <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-blue-100 mt-2">
+          Real-Time Student Focus Monitoring System
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <!-- Navigation Tabs -->
+      <div class="mb-8">
+        <div class="flex flex-wrap border-b border-gray-200">
+          <button
+            id="tab-detection"
+            class="tab-btn px-6 py-3 border-b-2 border-blue-600 text-blue-600 font-medium"
+            data-tab="detection-section"
+          >
+            <i class="fas fa-video mr-2"></i>Detection
+          </button>
+          <button
+            id="tab-pomodoro"
+            class="tab-btn px-6 py-3 text-gray-500 hover:text-gray-700 font-medium"
+            data-tab="pomodoro-section"
+          >
+            <i class="fas fa-clock mr-2"></i>Pomodoro
+          </button>
+          <button
+            id="tab-statistics"
+            class="tab-btn px-6 py-3 text-gray-500 hover:text-gray-700 font-medium"
+            data-tab="statistics-section"
+          >
+            <i class="fas fa-chart-bar mr-2"></i>Statistics
+          </button>
+          <button
+            id="tab-gamification"
+            class="tab-btn px-6 py-3 text-gray-500 hover:text-gray-700 font-medium"
+            data-tab="gamification-section"
+          >
+            <i class="fas fa-trophy mr-2"></i>Achievements
+          </button>
+          <button
+            id="tab-settings"
+            class="tab-btn px-6 py-3 text-gray-500 hover:text-gray-700 font-medium"
+            data-tab="settings-section"
+          >
+            <i class="fas fa-cog mr-2"></i>Settings
+          </button>
+        </div>
+      </div>
+
+      <!-- Balanced Layout with Larger Video Section -->
+      <div id="detection-section" class="tab-content active">
+        <!-- Main container with asymmetric columns: 2/3 for video, 1/3 for settings -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Left Side: Live Monitoring (takes 2 columns = 2/3 width) -->
+          <div
+            class="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden"
+          >
+            <div class="border-b border-gray-200 px-6 py-4">
+              <h2 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-video mr-2 text-blue-600"></i>Live Monitoring
+              </h2>
+            </div>
+            <div class="p-4">
+              <div class="video-container bg-gray-900">
+                <img
+                  id="videoFeed"
+                  class="hidden w-full h-full object-contain"
+                  alt="Video Feed"
+                />
+
+                <!-- Placeholder for when camera is not active -->
+                <div
+                  id="placeholderFeed"
+                  class="w-full h-full flex items-center justify-center"
+                >
+                  <div class="text-center p-6">
+                    <i
+                      class="fas fa-camera-rotate text-gray-400 text-5xl mb-4 placeholder-pulse"
+                    ></i>
+                    <p class="text-gray-400">
+                      Camera feed will appear here when detection is started
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Loading animation -->
+                <div
+                  id="loadingFeed"
+                  class="hidden w-full h-full flex flex-col items-center justify-center bg-gray-900"
+                >
+                  <div class="simple-spinner"></div>
+                  <p class="text-gray-300 font-medium mt-6">
+                    Initializing camera...
+                  </p>
+                  <p class="text-gray-400 text-sm mt-4">
+                    This might take a few seconds
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-4 flex justify-center space-x-4">
+                <button
+                  id="startBtn"
+                  class="flex items-center px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 btn-focus-effect"
+                >
+                  <i class="fas fa-play mr-2"></i>Start
+                </button>
+                <button
+                  id="stopBtn"
+                  class="flex items-center px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 btn-focus-effect"
+                  disabled
+                >
+                  <i class="fas fa-stop mr-2"></i>Stop
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Current Detection Settings (takes 1 column = 1/3 width) -->
+          <div
+            class="lg:col-span-1 bg-white rounded-lg shadow-md overflow-hidden"
+          >
+            <div class="border-b border-gray-200 px-4 py-3">
+              <h2 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-sliders mr-2 text-blue-600"></i>Current
+                Detection Settings
+              </h2>
+            </div>
+            <div class="p-3">
+              <!-- Compact stacked layout for metrics -->
+              <div class="space-y-3">
+                <!-- EAR Setting Card -->
+                <div class="bg-gray-50 rounded-lg p-2 border border-gray-200">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-gray-700"
+                      >Eye Aspect Ratio</span
+                    >
+                    <span
+                      id="currentEAR"
+                      class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full"
+                      >0.15</span
+                    >
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1 mb-1">
+                    Drowsiness threshold
+                  </p>
+                  <div class="w-full bg-gray-200 rounded-full h-1.5">
+                    <div
+                      id="earIndicator"
+                      class="bg-blue-600 h-1.5 rounded-full"
+                      style="width: 15%"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- MAR Setting Card -->
+                <div class="bg-gray-50 rounded-lg p-2 border border-gray-200">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-gray-700"
+                      >Mouth Aspect Ratio</span
+                    >
+                    <span
+                      id="currentMAR"
+                      class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full"
+                      >1.35</span
+                    >
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1 mb-1">Yawn threshold</p>
+                  <div class="w-full bg-gray-200 rounded-full h-1.5">
+                    <div
+                      id="marIndicator"
+                      class="bg-yellow-500 h-1.5 rounded-full"
+                      style="width: 67.5%"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- Head Pose Setting Card -->
+                <div class="bg-gray-50 rounded-lg p-2 border border-gray-200">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-gray-700"
+                      >Head Pose</span
+                    >
+                    <span
+                      id="currentHeadPose"
+                      class="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded-full"
+                      >10°</span
+                    >
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1 mb-1">
+                    Distraction angle
+                  </p>
+                  <div class="w-full bg-gray-200 rounded-full h-1.5">
+                    <div
+                      id="headPoseIndicator"
+                      class="bg-orange-500 h-1.5 rounded-full"
+                      style="width: 50%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pomodoro Section -->
+      <div id="pomodoro-section" class="tab-content">
+        <!-- Pomodoro content remains the same -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Pomodoro Timer -->
+          <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="border-b border-gray-200 px-6 py-4">
+                <h2 class="text-lg font-semibold text-gray-800">
+                  <i class="fas fa-clock mr-2 text-blue-600"></i>Pomodoro Timer
+                </h2>
+              </div>
+              <div class="p-6">
+                <div class="flex flex-col items-center">
+                  <!-- Timer Display with Improved Mode Indicator -->
+                  <div class="relative my-8 timer-display-container">
+                    <!-- The mode indicator will be dynamically inserted here -->
+                    <svg class="w-60 h-60">
+                      <!-- Background circle -->
+                      <circle
+                        class="text-gray-200"
+                        stroke-width="6"
+                        stroke="currentColor"
+                        fill="transparent"
+                        r="110"
+                        cx="120"
+                        cy="120"
+                      />
+                      <!-- Progress circle with improved animation -->
+                      <circle
+                        id="timerCircle"
+                        class="progress-ring"
+                        stroke-width="8"
+                        stroke="currentColor"
+                        fill="transparent"
+                        r="110"
+                        cx="120"
+                        cy="120"
+                        stroke-dasharray="691"
+                        stroke-dashoffset="0"
+                      />
+                    </svg>
+                    <div
+                      class="absolute inset-0 flex flex-col items-center justify-center"
+                    >
+                      <span
+                        id="timerDisplay"
+                        class="text-5xl font-bold text-gray-800"
+                        >25:00</span
+                      >
+                      <span id="sessionTypeDisplay" class="text-lg font-medium"
+                        >Work Session</span
+                      >
+                      <div class="mt-2 flex items-center text-sm text-gray-500">
+                        <i class="fas fa-repeat mr-1"></i>
+                        <span id="sessionsCompleted">0 </span> sessions
+                        completed
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Timer Controls with Improved Visual Design -->
+                  <div class="flex flex-col space-y-4">
+                    <!-- Timer Mode Buttons with Better Colors -->
+                    <div class="flex space-x-2 justify-center">
+                      <button
+                        id="pomodoroModeBtn"
+                        class="px-4 py-2 text-white rounded-md transition duration-300 focus:outline-none focus:ring-2 btn-mode active"
+                        style="background-color: #4361ee"
+                      >
+                        <i class="fas fa-briefcase mr-2"></i>Pomodoro
+                      </button>
+                      <button
+                        id="shortBreakModeBtn"
+                        class="px-4 py-2 text-white rounded-md transition duration-300 focus:outline-none focus:ring-2 btn-mode"
+                        style="background-color: #06d6a0"
+                      >
+                        <i class="fas fa-mug-hot mr-2"></i>Short Break
+                      </button>
+                      <button
+                        id="longBreakModeBtn"
+                        class="px-4 py-2 text-white rounded-md transition duration-300 focus:outline-none focus:ring-2 btn-mode"
+                        style="background-color: #9b5de5"
+                      >
+                        <i class="fas fa-couch mr-2"></i>Long Break
+                      </button>
+                    </div>
+
+                    <!-- Icon-Only Control Buttons -->
+                    <div class="flex space-x-8 justify-center mt-4">
+                      <button
+                        id="pomodoroStartBtn"
+                        class="w-14 h-14 rounded-full flex items-center justify-center text-white shadow-md transition-all duration-300 icon-button"
+                        style="background-color: #10b981"
+                        aria-label="Start Timer"
+                      >
+                        <i class="fas fa-play"></i>
+                      </button>
+                      <button
+                        id="pomodoroPauseBtn"
+                        class="w-14 h-14 rounded-full flex items-center justify-center text-white shadow-md transition-all duration-300 icon-button"
+                        style="background-color: #f59e0b"
+                        disabled
+                      >
+                        <i class="fas fa-pause"></i>
+                      </button>
+                      <button
+                        id="pomodoroStopBtn"
+                        class="w-14 h-14 rounded-full flex items-center justify-center text-white shadow-md transition-all duration-300 icon-button"
+                        style="background-color: #ef4444"
+                        disabled
+                      >
+                        <i class="fas fa-stop"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pomodoro Info -->
+          <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+              <div class="border-b border-gray-200 px-6 py-4">
+                <h2 class="text-lg font-semibold text-gray-800">
+                  <i class="fas fa-info-circle mr-2 text-blue-600"></i>Pomodoro
+                  Technique
+                </h2>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 mb-4">
+                  The Pomodoro Technique helps improve productivity and focus
+                  through timed work sessions and breaks.
+                </p>
+
+                <div class="space-y-4 mb-6">
+                  <div class="flex items-start">
+                    <div
+                      class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5"
+                    >
+                      <i class="fas fa-briefcase text-blue-600"></i>
+                    </div>
+                    <div>
+                      <h3 class="font-medium text-gray-800">
+                        Work Session (25 min)
+                      </h3>
+                      <p class="text-sm text-gray-600">
+                        Focus completely on a single task
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start">
+                    <div
+                      class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5"
+                    >
+                      <i class="fas fa-mug-hot text-green-600"></i>
+                    </div>
+                    <div>
+                      <h3 class="font-medium text-gray-800">
+                        Short Break (5 min)
+                      </h3>
+                      <p class="text-sm text-gray-600">
+                        Take a quick break to recharge
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start">
+                    <div
+                      class="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center mr-3 mt-0.5"
+                    >
+                      <i class="fas fa-couch text-purple-600"></i>
+                    </div>
+                    <div>
+                      <h3 class="font-medium text-gray-800">
+                        Long Break (15 min)
+                      </h3>
+                      <p class="text-sm text-gray-600">
+                        Take a longer break after 4 work sessions
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-lg p-4">
+                  <h3 class="font-medium text-blue-800 mb-2">Benefits</h3>
+                  <ul class="text-sm text-blue-700 space-y-1">
+                    <li class="flex items-center">
+                      <i class="fas fa-check text-green-500 mr-2"></i>
+                      Improves focus and concentration
+                    </li>
+                    <li class="flex items-center">
+                      <i class="fas fa-check text-green-500 mr-2"></i>
+                      Reduces mental fatigue
+                    </li>
+                    <li class="flex items-center">
+                      <i class="fas fa-check text-green-500 mr-2"></i>
+                      Boosts productivity and motivation
+                    </li>
+                    <li class="flex items-center">
+                      <i class="fas fa-check text-green-500 mr-2"></i>
+                      Creates better work-break balance
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics Section -->
+      <div id="statistics-section" class="tab-content">
+        <!-- Statistics content remains the same -->
+        <div class="grid grid-cols-1 gap-6">
+          <!-- Overview Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="px-6 py-5 border-b border-gray-100">
+                <div class="flex items-center">
+                  <div class="p-3 rounded-full bg-blue-100 mr-4">
+                    <i class="fas fa-hourglass-half text-blue-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">
+                      Session Duration
+                    </p>
+                    <h3
+                      id="sessionDuration"
+                      class="text-2xl font-bold text-gray-800"
+                    >
+                      0 min
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="px-6 py-4 bg-gray-50">
+                <p class="text-xs text-gray-500">
+                  Total time monitored this session
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="px-6 py-5 border-b border-gray-100">
+                <div class="flex items-center">
+                  <div class="p-3 rounded-full bg-red-100 mr-4">
+                    <i class="fas fa-eye-slash text-red-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">
+                      Drowsy Events
+                    </p>
+                    <h3
+                      id="drowsyEvents"
+                      class="text-2xl font-bold text-gray-800"
+                    >
+                      0
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="px-6 py-4 bg-gray-50">
+                <p class="text-xs text-gray-500">
+                  Times drowsiness was detected
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="px-6 py-5 border-b border-gray-100">
+                <div class="flex items-center">
+                  <div class="p-3 rounded-full bg-yellow-100 mr-4">
+                    <i class="fas fa-wind text-yellow-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Yawn Events</p>
+                    <h3
+                      id="yawnEvents"
+                      class="text-2xl font-bold text-gray-800"
+                    >
+                      0
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="px-6 py-4 bg-gray-50">
+                <p class="text-xs text-gray-500">Times yawning was detected</p>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="px-6 py-5 border-b border-gray-100">
+                <div class="flex items-center">
+                  <div class="p-3 rounded-full bg-orange-100 mr-4">
+                    <i
+                      class="fas fa-arrows-up-down-left-right text-orange-600 text-xl"
+                    ></i>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">
+                      Distraction Events
+                    </p>
+                    <h3
+                      id="distractionEvents"
+                      class="text-2xl font-bold text-gray-800"
+                    >
+                      0
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="px-6 py-4 bg-gray-50">
+                <p class="text-xs text-gray-500">
+                  Times head position indicated distraction
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Session Summary Charts -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="border-b border-gray-200 px-6 py-4">
+                <h2 class="text-lg font-semibold text-gray-800">
+                  <i class="fas fa-chart-line mr-2 text-blue-600"></i>Focus
+                  Timeline
+                </h2>
+              </div>
+              <div class="p-6">
+                <div
+                  id="focusTimelineChart"
+                  class="flex justify-center items-center h-64"
+                >
+                  <div class="text-center p-6 text-gray-400">
+                    <i class="fas fa-chart-line text-4xl mb-2"></i>
+                    <p>Focus tracking visualization will appear here</p>
+                    <p class="text-sm">Start a session to collect data</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="border-b border-gray-200 px-6 py-4">
+                <h2 class="text-lg font-semibold text-gray-800">
+                  <i class="fas fa-chart-pie mr-2 text-blue-600"></i>Event
+                  Distribution
+                </h2>
+              </div>
+              <div class="p-6">
+                <div
+                  id="distributionChartContainer"
+                  class="flex justify-center items-center h-64"
+                >
+                  <div class="text-center p-6 text-gray-400">
+                    <i class="fas fa-chart-pie text-4xl mb-2"></i>
+                    <p>Event distribution chart will appear here</p>
+                    <p class="text-sm">Start a session to collect data</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Session History with pagination -->
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div
+              class="border-b border-gray-200 px-6 py-4 flex justify-between items-center"
+            >
+              <h2 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-history mr-2 text-blue-600"></i>Session History
+              </h2>
+              <button
+                class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                <i class="fas fa-download mr-1"></i>Export Data
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table
+                class="min-w-full divide-y divide-gray-200"
+                id="sessionsTable"
+              >
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Date
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Duration
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Drowsy Events
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Yawn Events
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Distraction Events
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="text-center">
+                    <td colspan="5" class="px-6 py-8 text-gray-400">
+                      No previous sessions recorded
+                    </td>
+                  </tr>
+                  <!-- Session data rows would be dynamically inserted here -->
+                </tbody>
+              </table>
+            </div>
+            <!-- Pagination Container -->
+            <div id="sessionsPagination" class="hidden">
+              <!-- Pagination controls will be dynamically inserted here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gamification section -->
+      <div id="gamification-section" class="tab-content">
+        <div class="grid grid-cols-1 gap-6">
+          <!-- User Progress Overview -->
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="border-b border-gray-200 px-6 py-4">
+              <h2 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-user-graduate mr-2 text-blue-600"></i>Focus
+                Progress
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-col md:flex-row items-center">
+                <!-- Level Badge -->
+                <div
+                  class="w-32 h-32 flex-shrink-0 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-lg flex items-center justify-center mb-4 md:mb-0 md:mr-6 relative"
+                >
+                  <span id="userLevel" class="text-4xl font-bold text-white"
+                    >1</span
+                  >
+                  <span
+                    class="text-white text-sm absolute -bottom-2 bg-gray-800 rounded-full px-2 py-1"
+                    >Level</span
+                  >
+                </div>
+
+                <!-- Progress Details -->
+                <div class="flex-grow">
+                  <h3 class="text-lg font-semibold text-gray-800 mb-1">
+                    Focus Apprentice
+                  </h3>
+                  <div class="flex items-center mb-1">
+                    <i class="fas fa-star text-yellow-500 mr-2"></i>
+                    <span id="userPoints" class="font-medium">0</span>
+                    <span class="text-gray-500 ml-1">points earned</span>
+                  </div>
+
+                  <!-- Level Progress Bar -->
+                  <div class="mt-4">
+                    <div class="flex justify-between items-center mb-1">
+                      <span class="text-sm font-medium text-gray-700"
+                        >Progress to Level <span id="nextLevel">2</span></span
+                      >
+                      <span
+                        id="xpProgress"
+                        class="text-sm font-medium text-blue-600"
+                        >0%</span
+                      >
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                      <div
+                        id="levelProgressBar"
+                        class="bg-blue-600 h-2.5 rounded-full"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+
+                  <!-- Streaks section with fixed layout -->
+                  <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Daily Streak -->
+                    <div class="flex items-center">
+                      <div
+                        class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3"
+                      >
+                        <i class="fas fa-fire text-orange-500"></i>
+                      </div>
+                      <div>
+                        <p class="text-xs text-gray-500">Daily Streak</p>
+                        <p id="dailyStreak" class="font-semibold">0 days</p>
+                      </div>
+                    </div>
+
+                    <!-- Daily Check-in Button (modified) -->
+                    <div class="check-in-container flex flex-col items-start">
+                      <button
+                        id="dailyCheckInBtn"
+                        class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition duration-300"
+                      >
+                        <i class="fas fa-calendar-check mr-2"></i>Check In Today
+                      </button>
+                      <p
+                        id="checkInStatus"
+                        class="text-sm text-gray-500 mt-2 hidden"
+                      >
+                        You've already checked in today!
+                      </p>
+                    </div>
+
+                    <!-- Pomodoro Streak -->
+                    <div class="flex items-center">
+                      <div
+                        class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3"
+                      >
+                        <i class="fas fa-clock text-green-500"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">Pomodoro Streak</p>
+                        <p id="pomodoroStreak" class="font-semibold">
+                          0 sessions
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements and Badges -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Achievements -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div
+                class="border-b border-gray-200 px-6 py-4 flex justify-between items-center"
+              >
+                <h2 class="text-lg font-semibold text-gray-800">
+                  <i class="fas fa-award mr-2 text-blue-600"></i>Achievements
+                </h2>
+                <span
+                  id="achievementProgress"
+                  class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full"
+                  >0/0</span
+                >
+              </div>
+              <div class="p-6">
+                <div id="achievementsList" class="grid grid-cols-1 gap-4">
+                  <!-- Achievement items will be dynamically inserted here -->
+                  <div
+                    class="flex items-start p-3 rounded-lg bg-gray-50 border border-gray-200"
+                  >
+                    <div
+                      class="achievement-locked bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center mr-4"
+                    >
+                      <i class="fas fa-lock text-gray-400"></i>
+                    </div>
+                    <div class="flex-grow">
+                      <div class="flex justify-between items-start">
+                        <h4 class="font-medium text-gray-800">...</h4>
+                        <span class="text-xs font-semibold text-blue-600"
+                          >+0 pts</span
+                        >
+                      </div>
+                      <p class="text-sm text-gray-600">
+                        Loading achievements...
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Badges -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div
+                class="border-b border-gray-200 px-6 py-4 flex justify-between items-center"
+              >
+                <h2 class="text-lg font-semibold text-gray-800">
+                  <i class="fas fa-shield-alt mr-2 text-blue-600"></i>Badges
+                </h2>
+                <span
+                  id="badgeProgress"
+                  class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full"
+                  >0/0</span
+                >
+              </div>
+              <div class="p-6">
+                <div
+                  id="badgesList"
+                  class="grid grid-cols-2 sm:grid-cols-3 gap-4"
+                >
+                  <!-- Badge items will be dynamically inserted here -->
+                  <div
+                    class="badge-item flex flex-col items-center p-4 rounded-lg bg-gray-50 border border-gray-200 text-center"
+                  >
+                    <div
+                      class="badge-locked w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-2"
+                    >
+                      <i class="fas fa-lock text-gray-400"></i>
+                    </div>
+                    <h4 class="font-medium text-gray-400 text-sm">
+                      Loading...
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leaderboard Component -->
+          <div class="bg-white rounded-lg shadow-md overflow-hidden mt-6">
+            <div
+              class="border-b border-gray-200 px-6 py-4 flex justify-between items-center"
+            >
+              <h2 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-crown mr-2 text-blue-600"></i>Leaderboard
+              </h2>
+            </div>
+            <div class="p-6">
+              <div id="leaderboardList" class="divide-y divide-gray-200">
+                <!-- Leaderboard items will be dynamically inserted here -->
+                <div class="py-3 text-center text-gray-400">
+                  <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                  <p>Loading leaderboard data...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievement Notification Modal -->
+        <div
+          id="achievementModal"
+          class="fixed inset-0 z-50 hidden overflow-y-auto flex items-center justify-center"
+        >
+          <div
+            class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+          ></div>
+          <div
+            class="relative bg-white rounded-lg shadow-xl transform transition-all sm:max-w-md sm:w-full"
+          >
+            <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div
+                  class="mx-auto flex-shrink-0 flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 sm:mx-0 sm:h-12 sm:w-12"
+                >
+                  <i
+                    id="achievementIcon"
+                    class="fas fa-trophy text-blue-600"
+                  ></i>
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <h3
+                    class="text-lg leading-6 font-medium text-gray-900"
+                    id="achievementModalTitle"
+                  >
+                    Achievement Unlocked!
+                  </h3>
+                  <div class="mt-2">
+                    <p
+                      class="text-sm text-gray-500"
+                      id="achievementModalDescription"
+                    >
+                      You've earned a new achievement.
+                    </p>
+                  </div>
+                  <div class="mt-3 bg-blue-50 p-2 rounded-md">
+                    <div class="flex items-center">
+                      <i class="fas fa-plus-circle text-blue-600 mr-2"></i>
+                      <span
+                        class="text-blue-800 font-semibold"
+                        id="achievementModalPoints"
+                        >+50 points</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+            >
+              <button
+                type="button"
+                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                id="achievementModalClose"
+              >
+                Awesome!
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Section -->
+      <div id="settings-section" class="tab-content">
+        <!-- Settings content remains the same -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Detection Settings -->
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="border-b border-gray-200 px-6 py-4">
+              <h2 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-sliders mr-2 text-blue-600"></i>Detection
+                Settings
+              </h2>
+            </div>
+            <div class="p-6">
+              <form>
+                <div class="mb-4">
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="eyeThreshold"
+                  >
+                    Eye Aspect Ratio Threshold
+                  </label>
+                  <div class="flex items-center">
+                    <input
+                      id="eyeThreshold"
+                      type="range"
+                      min="0.10"
+                      max="0.50"
+                      step="0.01"
+                      value="0.15"
+                      class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <span
+                      id="eyeThresholdValue"
+                      class="ml-3 w-12 text-center text-sm font-medium text-gray-700"
+                      >0.15</span
+                    >
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1">
+                    Lower values increase drowsiness detection sensitivity
+                  </p>
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="mouthThreshold"
+                  >
+                    Mouth Aspect Ratio Threshold
+                  </label>
+                  <div class="flex items-center">
+                    <input
+                      id="mouthThreshold"
+                      type="range"
+                      min="0.5"
+                      max="3.0"
+                      step="0.05"
+                      value="1.35"
+                      class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <span
+                      id="mouthThresholdValue"
+                      class="ml-3 w-12 text-center text-sm font-medium text-gray-700"
+                      >1.35</span
+                    >
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1">
+                    Higher values increase yawn detection sensitivity
+                  </p>
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="headPoseThreshold"
+                  >
+                    Head Pose Threshold (degrees)
+                  </label>
+                  <div class="flex items-center">
+                    <input
+                      id="headPoseThreshold"
+                      type="range"
+                      min="5"
+                      max="20"
+                      step="1"
+                      value="10"
+                      class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <span
+                      id="headPoseThresholdValue"
+                      class="ml-3 w-12 text-center text-sm font-medium text-gray-700"
+                      >10°</span
+                    >
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1">
+                    Lower values increase distraction detection sensitivity
+                  </p>
+                </div>
+
+                <div class="mt-6">
+                  <button
+                    type="button"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Save Settings
+                  </button>
+                  <button
+                    type="button"
+                    class="ml-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  >
+                    Reset to Defaults
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Pomodoro Settings -->
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="border-b border-gray-200 px-6 py-4">
+              <h2 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-clock mr-2 text-blue-600"></i>Pomodoro Settings
+              </h2>
+            </div>
+            <div class="p-6">
+              <form>
+                <div class="mb-4">
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="workDuration"
+                  >
+                    Work Duration (minutes)
+                  </label>
+                  <input
+                    id="workDuration"
+                    type="number"
+                    min="1"
+                    max="60"
+                    value="25"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  />
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="shortBreakDuration"
+                  >
+                    Short Break Duration (minutes)
+                  </label>
+                  <input
+                    id="shortBreakDuration"
+                    type="number"
+                    min="1"
+                    max="30"
+                    value="5"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  />
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="longBreakDuration"
+                  >
+                    Long Break Duration (minutes)
+                  </label>
+                  <input
+                    id="longBreakDuration"
+                    type="number"
+                    min="5"
+                    max="60"
+                    value="15"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  />
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="sessionsBeforeLongBreak"
+                  >
+                    Sessions Before Long Break
+                  </label>
+                  <input
+                    id="sessionsBeforeLongBreak"
+                    type="number"
+                    min="1"
+                    max="10"
+                    value="4"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  />
+                </div>
+
+                <div class="mt-6">
+                  <button
+                    type="button"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Save Settings
+                  </button>
+                  <button
+                    type="button"
+                    class="ml-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  >
+                    Reset to Defaults
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-6">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <h2 class="text-xl font-bold text-white flex items-center">
+              <i class="fas fa-eye mr-2"></i>FocusGuard
+            </h2>
+            <p class="text-sm text-gray-400">Student Focus Monitoring System</p>
+          </div>
+          <div class="text-sm text-gray-400">
+            <p>&copy; 2025 FocusGuard. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- <script src="script.js"></script> -->
+    <!-- Socket.IO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Application modules -->
+    <script src="js/modules/app-state.js"></script>
+    <script src="js/modules/ui-utils.js"></script>
+    <script src="js/modules/notifications.js"></script>
+    <script src="js/modules/tabs.js"></script>
+    <script src="js/modules/detection.js"></script>
+    <script src="js/modules/pomodoro.js"></script>
+    <script src="js/modules/settings.js"></script>
+    <script src="js/modules/statistics.js"></script>
+    <script src="js/modules/gamification.js"></script>
+    <script src="js/modules/socket-handlers.js"></script>
+    <script src="js/modules/user_dropdown.js"></script>
+
+    <!-- Main application entry point -->
+    <script src="js/main.js"></script>
+  </body>
+</html>

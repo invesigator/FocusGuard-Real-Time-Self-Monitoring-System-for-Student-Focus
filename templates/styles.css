@@ -1,0 +1,1189 @@
+/* ==========================================================================
+   FocusGuard - Student Focus Monitoring System
+   CSS Structure:
+   1. Base Layout & Containers
+   2. Video Container
+   3. Navigation & Tabs
+   4. UI Components
+   5. Animations & Transitions
+   6. Timer & Pomodoro
+   7. Alerts & Notifications
+   8. Gamification
+   9. Progress Indicators
+   10. Responsive Design
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Base Layout & Containers
+   ========================================================================== */
+
+   .tab-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .tab-content.active {
+    display: block;
+    opacity: 1;
+  }
+  
+  #detection-section .grid {
+    display: grid;
+    grid-auto-rows: 1fr;
+  }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* Focus Mode */
+  .focus-mode .non-essential {
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+  }
+  
+  .focus-mode .essential {
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  
+  /* ==========================================================================
+     2. Video Container
+     ========================================================================== */
+  
+  .video-container {
+    aspect-ratio: 16/9;
+    background: #111827;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.375rem;
+    height: 450px;
+    max-height: calc(100vh - 200px);
+    width: 100%;
+    min-height: 350px;
+  }
+  
+  #videoFeed {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+  
+  #loadingFeed {
+    background-color: #111827;
+  }
+  
+  /* ==========================================================================
+     3. Navigation & Tabs
+     ========================================================================== */
+  
+  .tab-btn:not(.border-blue-600) {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .tab-btn:not(.border-blue-600)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(59, 130, 246, 0.2);
+    transform: translateY(2px);
+    transition: transform 0.2s ease;
+  }
+  
+  .tab-btn:not(.border-blue-600):hover::after {
+    transform: translateY(0);
+  }
+  
+  /* ==========================================================================
+     4. UI Components
+     ========================================================================== */
+  
+  .space-y-3 > div {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .space-y-3 > div:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .bg-gray-50 {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .bg-gray-50:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Status Indicators */
+  #earStatus,
+  #marStatus,
+  #statusIndicator,
+  #currentEAR,
+  #currentMAR,
+  #currentHeadPose {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Progress Bars */
+  #earIndicator,
+  #marIndicator,
+  #headPoseIndicator {
+    transition: width 0.5s ease-out;
+  }
+
+  #headPoseIndicator {
+    background-color: #9333ea; /* Purple color for the Head Pose indicator */
+    height: 6px;
+    border-radius: 3px;
+    display: block;
+    min-width: 4px; /* Ensure it's at least partially visible */
+    max-width: 100%;
+  }
+
+  /* Make sure the container has the proper styling */
+  .bg-gray-200.rounded-full.h-1\.5 {
+    background-color: #e2e8f0;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* Icon Circle */
+  .icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  
+  .icon-circle i {
+    color: #3b82f6;
+  }
+  
+  /* Alert Badge */
+  .alert-badge {
+    position: relative;
+  }
+  
+  .alert-badge::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background-color: #ef4444;
+    border-radius: 50%;
+  }
+  
+  /* Daily Check-in Button */
+  #dailyCheckInBtn {
+    display: flex;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  #dailyCheckInBtn:disabled {
+    background-color: #9ca3af;
+    opacity: 0.8;
+    cursor: not-allowed;
+    color: white;
+  }
+  
+  /* ==========================================================================
+     5. Animations & Transitions
+     ========================================================================== */
+  
+  /* Keyframes */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes ripple {
+    0% { transform: scale(0, 0); opacity: 0.5; }
+    100% { transform: scale(20, 20); opacity: 0; }
+  }
+  
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes pulse-update {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  
+  /* Animation Classes */
+  .pulse-animation,
+  .placeholder-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .spinner-border,
+  .simple-spinner {
+    animation: spin 1s linear infinite;
+  }
+  
+  .simple-spinner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #3b82f6;
+    border-right-color: #3b82f6;
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+  }
+  
+  .btn-focus-effect {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-focus-effect:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+  }
+  
+  .btn-focus-effect:focus:after {
+    animation: ripple 1s ease-out;
+  }
+  
+  .alert-transition {
+    transition: all 0.3s ease;
+  }
+  
+  .alert-enter {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  
+  .alert-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .alert-exit {
+    opacity: 1;
+  }
+  
+  .alert-exit-active {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  
+  .alert-box {
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .alert-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .setting-updated {
+    animation: pulse-update 0.5s ease;
+  }
+  
+  /* ==========================================================================
+     6. Timer & Pomodoro
+     ========================================================================== */
+  
+  .progress-ring {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+  
+  circle {
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-mode {
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-mode:not(.active) {
+    opacity: 0.75;
+  }
+  
+  .btn-mode.active {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-mode.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+  }
+  
+  .timer-display-container {
+    position: relative;
+    transition: all 0.3s ease-out;
+  }
+  
+  /* Timer Mode Colors */
+  .timer-pomodoro #timerCircle,
+  .timer-pomodoro #sessionTypeDisplay {
+    stroke: #4361ee;
+    color: #4361ee;
+    transition: stroke 0.5s ease, color 0.5s ease;
+  }
+  
+  .timer-short-break #timerCircle,
+  .timer-short-break #sessionTypeDisplay {
+    stroke: #06d6a0;
+    color: #06d6a0;
+    transition: stroke 0.5s ease, color 0.5s ease;
+  }
+  
+  .timer-long-break #timerCircle,
+  .timer-long-break #sessionTypeDisplay {
+    stroke: #9b5de5;
+    color: #9b5de5;
+    transition: stroke 0.5s ease, color 0.5s ease;
+  }
+  
+  .timer-mode-indicator {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    min-width: 100px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .icon-button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .icon-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .icon-button:active {
+    transform: scale(0.95);
+  }
+  
+  .icon-button i {
+    transition: transform 0.2s ease;
+  }
+  
+  .icon-button:hover i {
+    transform: scale(1.2);
+  }
+  
+  /* Timer Animations */
+  @keyframes countdown {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: 691; }
+  }
+  
+  @keyframes pulse-subtle {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+  
+  .animate-countdown {
+    animation: countdown linear forwards;
+  }
+  
+  .timer-active {
+    animation: pulse-subtle 4s infinite;
+  }
+  
+  /* ==========================================================================
+     7. Alerts & Notifications
+     ========================================================================== */
+  
+  .notification {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  
+  .notification.show {
+    opacity: 1;
+  }
+  
+  .reward-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+    z-index: 100;
+    max-width: 350px;
+    transform: translateX(400px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  .reward-notification.show {
+    transform: translateX(0);
+  }
+  
+  .reward-notification__title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+  
+  .reward-notification__points {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+  
+  /* ==========================================================================
+     8. Gamification
+     ========================================================================== */
+  
+  .leaderboard-item {
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  
+  .leaderboard-item:hover {
+    background-color: #f8fafc;
+    border-left-color: #3b82f6;
+  }
+  
+  .leaderboard-item.current-user {
+    background-color: #ebf5ff;
+    border-left-color: #3b82f6;
+    border-left-width: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 5;
+    transform: translateY(-1px) scale(1.01);
+    transition: all 0.2s ease;
+  }
+
+  /* Pulse animation for initial load to draw attention */
+  @keyframes highlight-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+    50% { box-shadow: 0 0 10px 0 rgba(59, 130, 246, 0.7); }
+  }
+
+  /* Apply pulse animation on page load */
+  .leaderboard-item.current-user {
+    animation: highlight-pulse 2s ease-in-out 1;
+  }
+
+  /* Make 'You' tag more visible */
+  .leaderboard-item.current-user .text-blue-600 {
+    font-weight: bold;
+    background-color: #dbeafe;
+    padding: 2px 6px;
+    border-radius: 10px;
+    display: inline-block;
+  }
+  
+  /* Staggered Animation for Leaderboard */
+  .leaderboard-item:nth-child(2) { animation-delay: 0.05s; }
+  .leaderboard-item:nth-child(3) { animation-delay: 0.1s; }
+  .leaderboard-item:nth-child(4) { animation-delay: 0.15s; }
+  .leaderboard-item:nth-child(5) { animation-delay: 0.2s; }
+  
+  .leaderboard-rank {
+    font-weight: bold;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  
+  .rank-1 {
+    background-color: #fef3c7;
+    color: #d97706;
+  }
+  
+  .rank-2 {
+    background-color: #f1f5f9;
+    color: #64748b;
+  }
+  
+  .rank-3 {
+    background-color: #fef2f2;
+    color: #b91c1c;
+  }
+  
+  /* Pagination */
+  .leaderboard-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  .pagination-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.375rem;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    transition: all 0.2s ease;
+  }
+  
+  .pagination-btn:hover:not(:disabled) {
+    background-color: #e5e7eb;
+    color: #1f2937;
+  }
+  
+  .pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .pagination-btn.active {
+    background-color: #3b82f6;
+    color: white;
+  }
+  
+  .pagination-info {
+    margin: 0 0.75rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+  
+  /* Achievement and Badge Animations */
+  @keyframes modal-pop {
+    0% { opacity: 0; transform: scale(0.9); }
+    70% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  
+  @keyframes points-float {
+    0% { opacity: 0; transform: translateY(0); }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-100px); }
+  }
+  
+  @keyframes level-pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+    50% { transform: scale(1.05); box-shadow: 0 0 10px 5px rgba(59, 130, 246, 0.7); }
+  }
+  
+  @keyframes badge-unlock {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2) rotate(5deg); }
+    75% { transform: scale(1.1) rotate(-3deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+  
+  @keyframes confetti-fall {
+    0% { opacity: 1; transform: translateY(-10px) rotate(0); }
+    100% { opacity: 0; transform: translateY(100px) rotate(720deg); }
+  }
+  
+  @keyframes flame-flicker {
+    0%, 100% { transform: scale(1) rotate(-5deg); }
+    50% { transform: scale(1.1) rotate(5deg); }
+  }
+  
+  #achievementModal > div:nth-child(2) {
+    animation: modal-pop 0.4s ease-out forwards;
+  }
+  
+  .points-animation {
+    animation: points-float 2s ease-out forwards;
+  }
+  
+  .level-up-animation {
+    animation: level-pulse 1.5s ease-in-out 3;
+  }
+  
+  .badge-unlock-animation {
+    animation: badge-unlock 1s ease-out;
+  }
+  
+  .confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    z-index: 1000;
+    animation: confetti-fall 4s linear forwards;
+  }
+  
+  .streak-counter {
+    position: relative;
+  }
+  
+  .streak-counter::after {
+    content: "🔥";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1.2rem;
+    animation: flame-flicker 1.5s ease-in-out infinite alternate;
+  }
+  
+  #achievementsList > div,
+  #badgesList > div {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeInUp 0.3s ease-out forwards;
+  }
+  
+  #achievementsList > div:hover,
+  #badgesList > div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Staggered Animation for Achievements */
+  #achievementsList > div:nth-child(2),
+  #badgesList > div:nth-child(2) { animation-delay: 0.1s; }
+  #achievementsList > div:nth-child(3),
+  #badgesList > div:nth-child(3) { animation-delay: 0.2s; }
+  
+  /* ==========================================================================
+     9. Progress Indicators
+     ========================================================================== */
+  
+  @keyframes progress-fill {
+    0% { width: 0%; }
+  }
+  
+  #levelProgressBar {
+    min-width: 5px;
+    transition: width 0.5s ease-in-out;
+  }
+  
+  #levelProgressBar.animate {
+    animation: progress-fill 1s ease-out forwards;
+  }
+  
+  .level-path {
+    position: relative;
+    height: 4px;
+    background-color: #e5e7eb;
+    border-radius: 2px;
+    margin: 20px 0;
+  }
+  
+  .level-path__progress {
+    position: absolute;
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #6366f1);
+    border-radius: 2px;
+    transition: width 1s ease-out;
+  }
+  
+  .level-path__marker {
+    position: absolute;
+    top: -8px;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    border: 3px solid #3b82f6;
+    z-index: 1;
+  }
+  
+  .level-path__marker.active {
+    background-color: #3b82f6;
+    border-color: white;
+  }
+  
+  .level-path__label {
+    position: absolute;
+    top: -30px;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  
+  /* ==========================================================================
+     10. Responsive Design
+     ========================================================================== */
+  
+  /* Large Tablets and Below */
+  @media (max-width: 1023px) {
+    .video-container {
+      height: 350px;
+    }
+  
+    #detection-section .grid {
+      grid-auto-rows: auto;
+    }
+  }
+  
+  /* Mobile Devices */
+  @media (max-width: 768px) {
+    .video-container {
+      min-height: 250px;
+      aspect-ratio: 4/3;
+    }
+  
+    .icon-circle {
+      width: 30px;
+      height: 30px;
+    }
+  
+    .icon-circle i {
+      font-size: 0.875rem;
+    }
+  
+    #userLevel {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+      text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+    }
+  
+    #gamification-section,
+    #gamification-section.active,
+    .md\:grid-cols-3 > div,
+    #achievementsList .flex.items-start,
+    #badgesList .badge-item {
+      display: block;
+      visibility: visible;
+      opacity: 1;
+    }
+  
+    #gamification-section .grid-cols-1.md\:grid-cols-3 {
+      display: grid;
+      visibility: visible;
+      opacity: 1;
+    }
+  
+    #gamification-section {
+      position: relative;
+      z-index: 10;
+    }
+  }
+
+  /* Modal animation for Sessions Modal */
+  @keyframes modal-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes modal-slide-in {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  #allSessionsModal {
+    animation: modal-fade-in 0.3s ease-out forwards;
+  }
+
+  #allSessionsModal > div:nth-child(2) {
+    animation: modal-slide-in 0.3s ease-out forwards;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #allSessionsModal .p-6 {
+    overflow-y: auto;
+  }
+
+  /* Improve table styles */
+  #allSessionsModal table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+  }
+
+  #allSessionsModal th {
+    position: sticky;
+    top: 0;
+    background-color: #f9fafb;
+    z-index: 10;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  #allSessionsModal tbody tr {
+    transition: background-color 0.15s ease;
+  }
+
+  #allSessionsModal tbody tr:hover {
+    background-color: #f3f4f6;
+  }
+
+  /* Event badges */
+  #allSessionsModal .px-2.py-1.text-xs.rounded-full {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+  }
+
+  /* Loading spinner animation */
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  #sessionsLoadingIndicator .fa-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  /* Empty state styling */
+  #allSessionsTableBody .text-center.text-gray-500 {
+    padding: 3rem 0;
+  }
+
+  /* Button hover effects for pagination */
+  #sessionsPaginationControls button:not([disabled]):hover {
+    background-color: #f3f4f6;
+    color: #1f2937;
+  }
+
+  /* Make close button more clickable */
+  #closeSessionsModalBtn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+  }
+
+  #closeSessionsModalBtn:hover {
+    background-color: #f3f4f6;
+  }
+
+  /* Add these styles to improve the View All link appearance */
+
+  .view-all-sessions {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .view-all-sessions:hover {
+    transform: translateX(2px);
+  }
+
+  .view-all-sessions::after {
+    content: '\f054'; /* Font Awesome chevron-right icon */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 0.75rem;
+    margin-left: 4px;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all 0.2s ease;
+  }
+
+  .view-all-sessions:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Add a subtle background effect on the Recent Sessions header when hovering the View All link */
+  .recent-sessions-header {
+    transition: background-color 0.2s ease;
+  }
+
+  .recent-sessions-header:hover {
+    background-color: #f9fafb;
+  }
+
+  /* Add this to ensure the View All link is always visible on mobile */
+  @media (max-width: 640px) {
+    .view-all-sessions {
+      padding: 4px 8px;
+      background-color: #eef2ff;
+      border-radius: 4px;
+    }
+    
+    .view-all-sessions::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Streak update animation */
+@keyframes streak-highlight {
+  0%, 100% { 
+    transform: scale(1);
+    color: inherit;
+  }
+  50% { 
+    transform: scale(1.2);
+    color: #f97316; /* Orange color */
+  }
+}
+
+.streak-highlight {
+  animation: streak-highlight 1.5s ease;
+}
+
+/* Enhance the daily streak container */
+#dailyStreak {
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+}
+
+/* Add a fire emoji next to the streak when it's 3 or higher */
+#dailyStreak.streak-fire::after {
+  content: "🔥";
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  font-size: 0.9rem;
+  transform-origin: center bottom;
+  animation: flame-flicker 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes flame-flicker {
+  0%, 100% { transform: scale(1) rotate(-5deg); }
+  50% { transform: scale(1.1) rotate(5deg); }
+}
+
+/* Animation for the progress bar when it updates */
+#levelProgressBar {
+  transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Make the progress percentage update smoothly */
+#xpProgress {
+  transition: all 0.5s ease;
+}
+
+/* Add a pulsing effect to the Check In button when it's available */
+@keyframes check-in-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+  50% { transform: scale(1.03); box-shadow: 0 0 5px 0 rgba(249, 115, 22, 0.7); }
+}
+
+#dailyCheckInBtn:not(:disabled) {
+  animation: check-in-pulse 2s infinite ease-in-out;
+}
+
+#dailyCheckInBtn:disabled {
+  animation: none;
+}
+
+/* Ensure the check-in button is always visible */
+#dailyCheckInBtn {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Improve visibility of "You've already checked in today!" message */
+#checkInStatus {
+  color: #4b5563;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: #f3f4f6;
+  transition: all 0.3s ease;
+}
+
+/* 
+ * Navigation warning styles for FocusGuard
+ * These styles enhance the confirmation dialog for detection warning
+ */
+
+/* Custom styling for the browser's built-in confirm dialog isn't possible,
+   but we can prepare for a custom modal if needed in the future */
+
+/* Detection active indicator - add a pulsing effect to the status indicator when detection is running */
+#statusIndicator.bg-green-500 {
+  animation: status-pulse 2s infinite;
+}
+
+@keyframes status-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* Custom modal for future implementation if the standard browser confirm dialog isn't sufficient */
+.detection-warning-modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.detection-warning-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s;
+}
+
+.warning-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.warning-header i {
+  color: #f97316;
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.warning-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.warning-body {
+  margin-bottom: 20px;
+  color: #4b5563;
+}
+
+.warning-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.warning-btn {
+  padding: 8px 16px;
+  margin-left: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.warning-btn-cancel {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.warning-btn-cancel:hover {
+  background-color: #e5e7eb;
+}
+
+.warning-btn-confirm {
+  background-color: #ef4444;
+  color: white;
+}
+
+.warning-btn-confirm:hover {
+  background-color: #dc2626;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
