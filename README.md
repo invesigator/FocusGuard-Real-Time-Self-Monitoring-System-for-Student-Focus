@@ -218,6 +218,42 @@ Based on comprehensive testing:
 - **Detection Latency**: <100ms for real-time alerts
 - **Memory Usage**: ~150MB typical operation
 
+
+## Demo with Screenshot
+### Registration Page
+<img width="940" height="498" alt="image" src="https://github.com/user-attachments/assets/ea6b29ab-3bd0-40c7-9e9d-e30f1ec562c6" />
+
+### Login Page
+<img width="940" height="497" alt="image" src="https://github.com/user-attachments/assets/c9d7038b-ccc7-4b99-a996-8d5342b9eed5" />
+
+### Main Detection Page
+<img width="940" height="500" alt="image" src="https://github.com/user-attachments/assets/dd3d7b4e-099b-439e-9ba2-e9df4d7d1262" />
+
+### Detection Start
+<img width="940" height="498" alt="image" src="https://github.com/user-attachments/assets/22281df6-c6e8-4c30-8ed4-22c62df73d07" />
+<img width="940" height="500" alt="image" src="https://github.com/user-attachments/assets/1a1f51bb-7eb2-4f81-89af-3782d450e5fe" />
+<img width="940" height="499" alt="image" src="https://github.com/user-attachments/assets/5d63eebb-fbca-4e8a-acf1-a727e088f819" />
+<img width="940" height="498" alt="image" src="https://github.com/user-attachments/assets/2cb1c0ab-95bf-4b24-a132-6ddb5ba68524" />
+
+### Pomodoro Page
+<img width="940" height="498" alt="image" src="https://github.com/user-attachments/assets/e84ec777-52ce-4400-aaca-eb3eba53de91" />
+
+### Statistics Page
+<img width="940" height="497" alt="image" src="https://github.com/user-attachments/assets/c3af67c1-08c1-482d-bd0d-2000ba9465f1" />
+<img width="940" height="499" alt="image" src="https://github.com/user-attachments/assets/62472fc8-dad3-45a3-a807-593cc31cce02" />
+
+### Achievement Page
+<img width="940" height="498" alt="image" src="https://github.com/user-attachments/assets/85095178-1196-4bb6-baa9-3c482aa1200b" />
+<img width="940" height="496" alt="image" src="https://github.com/user-attachments/assets/6883a373-b3e1-4c29-a7be-8810bb778ed1" />
+<img width="940" height="497" alt="image" src="https://github.com/user-attachments/assets/67ad9689-7ba3-4a52-aba7-159e46528b83" />
+
+### Setting Page
+<img width="940" height="496" alt="image" src="https://github.com/user-attachments/assets/f0f58167-f64a-4bc1-8f66-2280e27c2e69" />
+
+### Profile Page
+<img width="940" height="497" alt="image" src="https://github.com/user-attachments/assets/98428213-6407-4331-b80f-fa444cb30a6d" />
+
+
 ## 🔬 Research & Validation
 
 This project was developed as part of a Bachelor's thesis at Universiti Tunku Abdul Rahman (UTAR), supervised by Ms. Lai Siew Cheng. The system has been evaluated through:
